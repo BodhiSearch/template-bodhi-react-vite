@@ -17,7 +17,7 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
 Instead, please report them via one of the following methods:
 
 1. **GitHub Security Advisories** (Preferred)
-   - Go to the [Security tab](https://github.com/BodhiSearch/demo-chat/security/advisories)
+   - Go to the [Security tab](https://github.com/{{githubOrg}}/{{projectName}}/security/advisories)
    - Click "Report a vulnerability"
    - Fill out the form with details
 

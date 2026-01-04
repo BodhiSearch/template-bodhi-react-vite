@@ -82,8 +82,8 @@ cp .env.example .env
 ```
 
 Required variables:
-- `VITE_AUTH_CLIENT_ID` - Your Bodhi OAuth client ID
-- `VITE_AUTH_SERVER_URL` - Bodhi auth server URL (default: https://main-id.getbodhi.app/realms/bodhi)
+- `VITE_BODHI_APP_CLIENT_ID` - Your Bodhi OAuth client ID
+- `VITE_BODHI_AUTH_SERVER_URL` - Bodhi auth server URL (default: https://id.getbodhi.app/realms/bodhi)
 
 ## Available Scripts
 
@@ -160,6 +160,17 @@ Configuration is done via CSS variables in `src/index.css`. Uses Tailwind v4 wit
 - Dark mode support (via `next-themes`)
 
 {{#if githubPages}}
+### Enable GitHub Pages
+
+**Via UI:**
+1. Go to Repo → Settings → Pages
+2. Under "Build and deployment", select Source: **GitHub Actions**
+
+**Via CLI:**
+```bash
+gh api -X POST "/repos/{{githubOrg}}/{{projectName}}/pages" -f build_type=workflow
+```
+
 ### GitHub Pages Deployment
 
 Deployment is automated via GitHub Actions on push to `main`. To deploy manually:

@@ -35,8 +35,8 @@ jobs:
       - run: npm run build
         env:
           # Configure these in GitHub Repository Secrets
-          VITE_AUTH_CLIENT_ID: ${{ secrets.VITE_AUTH_CLIENT_ID }}
-          VITE_AUTH_SERVER_URL: ${{ secrets.VITE_AUTH_SERVER_URL }}
+          VITE_BODHI_APP_CLIENT_ID: ${{ secrets.VITE_BODHI_APP_CLIENT_ID }}
+          VITE_BODHI_AUTH_SERVER_URL: ${{ secrets.VITE_BODHI_AUTH_SERVER_URL }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist

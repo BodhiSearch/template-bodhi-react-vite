@@ -1,4 +1,4 @@
-# Contributing to demo-chat
+# Contributing to {{projectName}}
 
 Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to this project.
 
@@ -15,8 +15,8 @@ Thank you for your interest in contributing! This document provides guidelines a
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/demo-chat.git
-   cd demo-chat
+   git clone https://github.com/YOUR_USERNAME/{{projectName}}.git
+   cd {{projectName}}
    ```
 3. Install dependencies:
    ```bash
@@ -221,7 +221,7 @@ ESLint and Prettier are configured to enforce these automatically.
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/BodhiSearch/demo-chat/discussions)
-- Review existing [Issues](https://github.com/BodhiSearch/demo-chat/issues)
+- Open a [Discussion](https://github.com/{{githubOrg}}/{{projectName}}/discussions)
+- Review existing [Issues](https://github.com/{{githubOrg}}/{{projectName}}/issues)
 
 Thank you for contributing! 🎉

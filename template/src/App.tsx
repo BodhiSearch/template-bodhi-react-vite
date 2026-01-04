@@ -8,10 +8,9 @@ function App() {
     <BodhiProvider
       authClientId={AUTH_CLIENT_ID}
       clientConfig={{
-        authServerUrl: AUTH_SERVER_URL,
+        ...(AUTH_SERVER_URL && { authServerUrl: AUTH_SERVER_URL }),
       }}
-      basePath="/demo-chat"
-      logLevel="debug"
+      basePath="{{basePath}}/"
     >
       <Layout />
       <Toaster />

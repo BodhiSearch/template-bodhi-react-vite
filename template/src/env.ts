@@ -1,15 +1,14 @@
 // Environment variables with build-time validation
 
-const AUTH_CLIENT_ID = import.meta.env.VITE_AUTH_CLIENT_ID;
-const AUTH_SERVER_URL = import.meta.env.VITE_AUTH_SERVER_URL;
+const AUTH_CLIENT_ID = import.meta.env.VITE_BODHI_APP_CLIENT_ID;
+const AUTH_SERVER_URL = import.meta.env.VITE_BODHI_AUTH_SERVER_URL || undefined;
 
-// Fail build if required env vars are missing
 if (!AUTH_CLIENT_ID) {
-  throw new Error('VITE_AUTH_CLIENT_ID environment variable is required');
-}
-
-if (!AUTH_SERVER_URL) {
-  throw new Error('VITE_AUTH_SERVER_URL environment variable is required');
+  throw new Error(
+    'VITE_BODHI_APP_CLIENT_ID environment variable is required. ' +
+      'Register your app on https://developer.getbodhi.app to receive app client id, ' +
+      'and set it by copying .env.example to .env and updating VITE_BODHI_APP_CLIENT_ID value'
+  );
 }
 
 export { AUTH_CLIENT_ID, AUTH_SERVER_URL };
