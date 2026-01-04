@@ -23,6 +23,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Configure VITE_BODHI_APP_CLIENT_ID in GitHub Repository Variables
+      VITE_BODHI_AUTH_SERVER_URL: https://id.getbodhi.app/realms/bodhi
+      VITE_BODHI_APP_CLIENT_ID: ${{ vars.VITE_BODHI_APP_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -33,10 +37,6 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-        env:
-          # Configure these in GitHub Repository Secrets
-          VITE_BODHI_APP_CLIENT_ID: ${{ secrets.VITE_BODHI_APP_CLIENT_ID }}
-          VITE_BODHI_AUTH_SERVER_URL: ${{ secrets.VITE_BODHI_AUTH_SERVER_URL }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist

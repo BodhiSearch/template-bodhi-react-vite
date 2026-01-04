@@ -1,5 +1,6 @@
 import { useBodhi } from '@bodhiapp/bodhi-js-react';
 import { Settings } from 'lucide-react';
+import { toast } from 'sonner';
 import StatusIndicator from './StatusIndicator';
 import ModelSelector from './ModelSelector';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,13 @@ export default function Header({
 }: HeaderProps) {
   const { clientState, isReady, isServerReady, auth, isAuthenticated, login, logout, showSetup } =
     useBodhi();
+
+  const handleLogin = async () => {
+    const authState = await login();
+    if (authState?.status === 'error' && authState.error) {
+      toast.error(authState.error.message);
+    }
+  };
 
   return (
     <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
@@ -78,7 +86,7 @@ export default function Header({
             </Button>
           </div>
         ) : (
-          <Button onClick={login}>Login</Button>
+          <Button onClick={handleLogin}>Login</Button>
         )}
       </div>
     </header>
