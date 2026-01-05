@@ -10,7 +10,7 @@ function App() {
       clientConfig={{
         ...(AUTH_SERVER_URL && { authServerUrl: AUTH_SERVER_URL }),
       }}
-      basePath="{{basePath}}/"
+      basePath="/{{projectName}}/"
     >
       <Layout />
       <Toaster />
