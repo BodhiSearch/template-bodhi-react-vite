@@ -3,19 +3,19 @@ import { Toaster } from '@/components/ui/sonner';
 import { AUTH_CLIENT_ID, AUTH_SERVER_URL } from './env';
 import Layout from './components/Layout';
 
-function App() {
+{{{{raw}}}}function App() {
   return (
     <BodhiProvider
-      authClientId=\{AUTH_CLIENT_ID}
-      clientConfig=\{\{
-        ...(AUTH_SERVER_URL && \{ authServerUrl: AUTH_SERVER_URL }),
+      authClientId={AUTH_CLIENT_ID}
+      clientConfig={{
+        ...(AUTH_SERVER_URL && { authServerUrl: AUTH_SERVER_URL }),
       }}
-      basePath="/{{projectName}}/"
+      basePath="/{{{{/raw}}}}{{projectName}}{{{{raw}}}}/"
     >
       <Layout />
       <Toaster />
     </BodhiProvider>
   );
-}
+}{{{{/raw}}}}
 
 export default App;
