@@ -45,7 +45,8 @@
       "index.html",
       "public/404.html",
       "README.md",
-      "playwright.config.ts"
+      "playwright.config.ts",
+      "src/App.tsx"
     ],
     "conditionalDelete": {
       "githubPages": {
