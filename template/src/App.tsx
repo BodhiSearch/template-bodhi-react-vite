@@ -6,10 +6,10 @@ import Layout from './components/Layout';
 function App() {
   return (
     <BodhiProvider
-      authClientId={AUTH_CLIENT_ID}
-      clientConfig={{
-        ...(AUTH_SERVER_URL && { authServerUrl: AUTH_SERVER_URL }),
-      }}
+      authClientId=\{AUTH_CLIENT_ID}
+      clientConfig=\{\{
+        ...(AUTH_SERVER_URL && \{ authServerUrl: AUTH_SERVER_URL }),
+      \}\}
       basePath="/{{projectName}}/"
     >
       <Layout />
