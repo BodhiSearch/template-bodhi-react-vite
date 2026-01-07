@@ -50,6 +50,7 @@ export default function InputArea({ onSendMessage, onClearMessages }: InputAreaP
 
           {/* Input field */}
           <Input
+            data-testid="chat-input"
             value={message}
             onChange={e => setMessage(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSubmit()}
@@ -59,7 +60,7 @@ export default function InputArea({ onSendMessage, onClearMessages }: InputAreaP
           />
 
           {/* Submit button */}
-          <Button onClick={handleSubmit} disabled={isDisabled || !message.trim()}>
+          <Button data-testid="send-button" onClick={handleSubmit} disabled={isDisabled || !message.trim()}>
             Send
           </Button>
         </div>

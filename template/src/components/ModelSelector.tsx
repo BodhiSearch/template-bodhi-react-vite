@@ -25,7 +25,7 @@ export default function ModelSelector({
 }: ModelSelectorProps) {
   return (
     <div className="flex items-center gap-2">
-      <Select value={selectedModel} onValueChange={setSelectedModel} disabled={models.length === 0}>
+      <Select data-testid="model-selector" value={selectedModel} onValueChange={setSelectedModel} disabled={models.length === 0}>
         <SelectTrigger className="w-[200px]">
           <SelectValue placeholder="No models loaded" />
         </SelectTrigger>
@@ -38,6 +38,7 @@ export default function ModelSelector({
         </SelectContent>
       </Select>
       <Button
+        data-testid="btn-refresh-models"
         onClick={onRefreshModels}
         variant="ghost"
         size="icon"

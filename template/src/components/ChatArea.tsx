@@ -6,9 +6,10 @@ import type { ChatMessage } from '../hooks/useChat';
 interface ChatAreaProps {
   messages: ChatMessage[];
   isStreaming: boolean;
+  error?: string | null;
 }
 
-export default function ChatArea({ messages, isStreaming }: ChatAreaProps) {
+export default function ChatArea({ messages, isStreaming, error }: ChatAreaProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when messages change
@@ -17,7 +18,11 @@ export default function ChatArea({ messages, isStreaming }: ChatAreaProps) {
   }, [messages]);
 
   return (
-    <ScrollArea className="flex-1">
+    <ScrollArea
+      className="flex-1"
+      data-testid="chat-area"
+      data-teststate={error ? 'error' : isStreaming ? 'streaming' : 'idle'}
+    >
       <div className="p-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           {messages.length === 0 ? (
@@ -28,7 +33,7 @@ export default function ChatArea({ messages, isStreaming }: ChatAreaProps) {
                 <Message key={index} role={msg.role} content={msg.content} />
               ))}
               {isStreaming && (
-                <div className="flex justify-start mb-4">
+                <div data-testid="streaming-indicator" className="flex justify-start mb-4">
                   <div className="bg-gray-200 px-4 py-2 rounded-lg">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-gray-600 rounded-full animate-pulse" />

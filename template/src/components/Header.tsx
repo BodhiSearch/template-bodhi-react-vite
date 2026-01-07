@@ -71,23 +71,25 @@ export default function Header({
         </div>
 
         {/* Setup Button */}
-        <Button onClick={showSetup} variant="ghost" size="icon" title="Settings">
+        <Button data-testid="btn-settings" onClick={showSetup} variant="ghost" size="icon" title="Settings">
           <Settings />
         </Button>
 
         {/* Login/Logout Button */}
-        {isAuthenticated ? (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-700" title={auth.user?.email}>
-              {auth.user?.name || auth.user?.email || 'User'}
-            </span>
-            <Button onClick={logout} variant="ghost">
-              Logout
-            </Button>
-          </div>
-        ) : (
-          <Button onClick={handleLogin}>Login</Button>
-        )}
+        <section data-testid="section-auth" data-teststate={isAuthenticated ? 'authenticated' : 'unauthenticated'}>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2">
+              <span data-testid="span-auth-name" className="text-sm text-gray-700" title={auth.user?.email}>
+                {auth.user?.name || auth.user?.email || 'User'}
+              </span>
+              <Button data-testid="btn-auth-logout" onClick={logout} variant="ghost">
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Button data-testid="btn-auth-login" onClick={handleLogin}>Login</Button>
+          )}
+        </section>
       </div>
     </header>
   );

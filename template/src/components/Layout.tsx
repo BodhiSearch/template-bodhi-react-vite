@@ -38,7 +38,7 @@ export default function Layout() {
         isLoadingModels={isLoadingModels}
         onRefreshModels={loadModels}
       />
-      <ChatArea messages={messages} isStreaming={isStreaming} />
+      <ChatArea messages={messages} isStreaming={isStreaming} error={chatError} />
       <InputArea onSendMessage={sendMessage} onClearMessages={clearMessages} />
     </div>
   );
