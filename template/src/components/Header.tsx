@@ -2,25 +2,10 @@ import { useBodhi } from '@bodhiapp/bodhi-js-react';
 import { Settings } from 'lucide-react';
 import { toast } from 'sonner';
 import StatusIndicator from './StatusIndicator';
-import ModelSelector from './ModelSelector';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-interface HeaderProps {
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
-  models: string[];
-  isLoadingModels: boolean;
-  onRefreshModels: () => void;
-}
-
-export default function Header({
-  selectedModel,
-  setSelectedModel,
-  models,
-  isLoadingModels,
-  onRefreshModels,
-}: HeaderProps) {
+export default function Header() {
   const { clientState, isReady, isServerReady, isInitializing, setupState, auth, isAuthenticated, login, logout, showSetup } =
     useBodhi();
 
@@ -44,15 +29,6 @@ export default function Header({
           powered by Bodhi Browser Extension
         </span>
       </div>
-
-      {/* Center: Model selector */}
-      <ModelSelector
-        selectedModel={selectedModel}
-        setSelectedModel={setSelectedModel}
-        models={models}
-        isLoadingModels={isLoadingModels}
-        onRefreshModels={onRefreshModels}
-      />
 
       {/* Right: Status & Controls */}
       <div className="flex items-center gap-3">

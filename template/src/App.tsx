@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { BodhiProvider, useBodhi, BodhiBadge } from '@bodhiapp/bodhi-js-react';
 import { Toaster } from '@/components/ui/sonner';
 import { AUTH_CLIENT_ID, AUTH_SERVER_URL } from './env';
@@ -6,18 +6,18 @@ import Layout from './components/Layout';
 
 function AppContent() {
   const { clientState, showSetup } = useBodhi();
-  const [hasAutoOpened, setHasAutoOpened] = useState(false);
+  const hasAutoOpenedRef = useRef(false);
 
   useEffect(() => {
     const shouldAutoOpen =
       clientState.status === 'direct-not-connected' ||
       clientState.status === 'extension-not-found';
 
-    if (shouldAutoOpen && !hasAutoOpened) {
+    if (shouldAutoOpen && !hasAutoOpenedRef.current) {
       showSetup();
-      setHasAutoOpened(true);
+      hasAutoOpenedRef.current = true;
     }
-  }, [clientState.status, hasAutoOpened, showSetup]);
+  }, [clientState.status, showSetup]);
 
   return (
     <>
@@ -37,7 +37,7 @@ function App() {
       basePath="/{{projectName}}/"
     >
       <AppContent />
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-4 right-6 z-50">
         <BodhiBadge size="md" variant="light" />
       </div>
     </BodhiProvider>
