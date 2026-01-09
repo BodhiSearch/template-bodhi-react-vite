@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import StatusIndicator from './StatusIndicator';
 import ModelSelector from './ModelSelector';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 
 interface HeaderProps {
   selectedModel: string;
@@ -20,7 +21,7 @@ export default function Header({
   isLoadingModels,
   onRefreshModels,
 }: HeaderProps) {
-  const { clientState, isReady, isServerReady, auth, isAuthenticated, login, logout, showSetup } =
+  const { clientState, isReady, isServerReady, isInitializing, setupState, auth, isAuthenticated, login, logout, showSetup } =
     useBodhi();
 
   const handleLogin = async () => {
@@ -29,6 +30,8 @@ export default function Header({
       toast.error(authState.error.message);
     }
   };
+
+  const isSettingsLoading = isInitializing || setupState !== 'ready';
 
   return (
     <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
@@ -72,7 +75,7 @@ export default function Header({
 
         {/* Setup Button */}
         <Button data-testid="btn-settings" onClick={showSetup} variant="ghost" size="icon" title="Settings">
-          <Settings />
+          {isSettingsLoading ? <Spinner /> : <Settings />}
         </Button>
 
         {/* Login/Logout Button */}
