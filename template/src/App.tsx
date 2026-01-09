@@ -33,7 +33,7 @@ function App() {
       clientConfig=\{{
         ...(AUTH_SERVER_URL && { authServerUrl: AUTH_SERVER_URL }),
       }}
-      basePath="/{{projectName}}/"
+      basePath="{{basePath}}"
     >
       <AppContent />
       <div className="fixed bottom-4 right-6 z-50">
