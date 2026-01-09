@@ -13,6 +13,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    strictPort: true,
+  },
   test: {
     globals: true,
     environment: 'jsdom',
