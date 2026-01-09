@@ -20,7 +20,6 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
-      {/* Left: Branding */}
       <div className="flex items-center gap-2">
         <h1 className="text-lg font-semibold" data-testid="app-title">
           Demo Chat
@@ -30,9 +29,7 @@ export default function Header() {
         </span>
       </div>
 
-      {/* Right: Status & Controls */}
       <div className="flex items-center gap-3">
-        {/* Status Indicators */}
         <div className="flex items-center gap-2 border-r border-gray-200 pr-3">
           <StatusIndicator
             label="Client"
@@ -49,12 +46,10 @@ export default function Header() {
           </span>
         </div>
 
-        {/* Setup Button */}
         <Button data-testid="btn-settings" onClick={showSetup} variant="ghost" size="icon" title="Settings">
           {isSettingsLoading ? <Spinner /> : <Settings />}
         </Button>
 
-        {/* Login/Logout Button */}
         <section data-testid="section-auth" data-teststate={isAuthenticated ? 'authenticated' : 'unauthenticated'}>
           {isAuthenticated ? (
             <div className="flex items-center gap-2">

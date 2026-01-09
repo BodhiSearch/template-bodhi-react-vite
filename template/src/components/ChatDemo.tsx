@@ -13,18 +13,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-// ============================================================================
-// Types
-// ============================================================================
-
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
-
-// ============================================================================
-// Internal Components
-// ============================================================================
 
 interface MessageProps {
   role: 'user' | 'assistant';
@@ -56,16 +48,59 @@ interface ChatAreaProps {
 
 function ChatArea({ messages, isStreaming, error }: ChatAreaProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollViewportRef = useRef<HTMLDivElement>(null);
+  const isUserScrolledUpRef = useRef(false);
+  const prevMessagesLengthRef = useRef(0);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const viewport = scrollViewportRef.current;
+    if (!viewport) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50;
+      isUserScrolledUpRef.current = !isAtBottom;
+    };
+
+    viewport.addEventListener('scroll', handleScroll);
+    return () => viewport.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    const isNewUserMessage =
+      messages.length > prevMessagesLengthRef.current && lastMessage?.role === 'user';
+
+    if (isNewUserMessage) {
+      isUserScrolledUpRef.current = false;
+    }
+
+    prevMessagesLengthRef.current = messages.length;
   }, [messages]);
+
+  useEffect(() => {
+    if (!isUserScrolledUpRef.current) {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: isStreaming ? 'instant' : 'smooth',
+      });
+    }
+  }, [messages, isStreaming]);
 
   return (
     <ScrollArea
-      className="flex-1"
+      className="flex-1 overflow-hidden"
       data-testid="chat-area"
       data-teststate={error ? 'error' : isStreaming ? 'streaming' : 'idle'}
+      ref={(node: HTMLDivElement | null) => {
+        if (node) {
+          const viewport = node.querySelector(
+            '[data-slot="scroll-area-viewport"]'
+          ) as HTMLDivElement;
+          if (viewport) {
+            scrollViewportRef.current = viewport;
+          }
+        }
+      }}
     >
       <div className="p-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
@@ -139,10 +174,9 @@ function InputArea({
   };
 
   return (
-    <div className="w-full px-4 pb-4">
+    <div className="w-full px-4 py-4">
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-[auto_1fr_auto] grid-rows-[1fr_auto] gap-2 p-3 bg-white border border-gray-200 rounded-3xl shadow-sm">
-          {/* New chat button - spans 2 rows, centered vertically */}
           <Button
             onClick={handleNewChat}
             variant="ghost"
@@ -154,7 +188,6 @@ function InputArea({
             <Plus />
           </Button>
 
-          {/* Input field - top row of middle column */}
           <Input
             data-testid="chat-input"
             value={message}
@@ -165,7 +198,6 @@ function InputArea({
             className="col-start-2 border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
-          {/* Model selector + refresh - bottom row of middle column, right aligned */}
           <div className="col-start-2 flex items-center gap-2 justify-end">
             <Select value={selectedModel} onValueChange={setSelectedModel} disabled={models.length === 0}>
               <SelectTrigger data-testid="model-selector" className="w-[240px] border-0 focus:ring-0">
@@ -192,7 +224,6 @@ function InputArea({
             </Button>
           </div>
 
-          {/* Send button - spans 2 rows, centered vertically */}
           <Button
             data-testid="send-button"
             onClick={handleSubmit}
@@ -209,10 +240,6 @@ function InputArea({
     </div>
   );
 }
-
-// ============================================================================
-// useChat Hook
-// ============================================================================
 
 function useChat() {
   const { client, isAuthenticated, isReady } = useBodhi();
@@ -356,10 +383,6 @@ function useChat() {
     loadModels,
   };
 }
-
-// ============================================================================
-// Main Component
-// ============================================================================
 
 export default function ChatDemo() {
   const {
