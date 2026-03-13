@@ -14,6 +14,7 @@ export default function Header() {
     setupState,
     auth,
     isAuthenticated,
+    isAuthLoading,
     login,
     logout,
     showSetup,
@@ -84,8 +85,8 @@ export default function Header() {
               </Button>
             </div>
           ) : (
-            <Button data-testid="btn-auth-login" onClick={handleLogin}>
-              Login
+            <Button data-testid="btn-auth-login" onClick={handleLogin} disabled={isAuthLoading}>
+              {isAuthLoading ? <Spinner /> : 'Login'}
             </Button>
           )}
         </section>

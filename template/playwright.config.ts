@@ -12,6 +12,7 @@ export default defineConfig({
   reporter: 'html',
   timeout: isCI ? 60000 : 30000,
   use: {
+    actionTimeout: 10000,
     baseURL,
     trace: 'on-first-retry',
   },
