@@ -1,37 +1,38 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useBodhi } from '@bodhiapp/bodhi-js-react';
-import { Plus, RefreshCw, ArrowUp } from 'lucide-react';
-import { toast } from 'sonner';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useBodhi } from "@bodhiapp/bodhi-js-react";
+import { Plus, RefreshCw, ArrowUp } from "lucide-react";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 export interface ChatMessage {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
 }
 
 interface MessageProps {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
 }
 
 function Message({ role, content }: MessageProps) {
-  const isUser = role === 'user';
+  const isUser = role === "user";
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}>
       <div
-        data-testid={isUser ? 'message-user' : 'message-assistant'}
+        data-testid={isUser ? "message-user" : "message-assistant"}
         className={`max-w-[70%] px-4 py-2 rounded-lg ${
-          isUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+          isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
         }`}
       >
         <div className="whitespace-pre-wrap break-words">{content}</div>
@@ -62,14 +63,15 @@ function ChatArea({ messages, isStreaming, error }: ChatAreaProps) {
       isUserScrolledUpRef.current = !isAtBottom;
     };
 
-    viewport.addEventListener('scroll', handleScroll);
-    return () => viewport.removeEventListener('scroll', handleScroll);
+    viewport.addEventListener("scroll", handleScroll);
+    return () => viewport.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     const isNewUserMessage =
-      messages.length > prevMessagesLengthRef.current && lastMessage?.role === 'user';
+      messages.length > prevMessagesLengthRef.current &&
+      lastMessage?.role === "user";
 
     if (isNewUserMessage) {
       isUserScrolledUpRef.current = false;
@@ -81,7 +83,7 @@ function ChatArea({ messages, isStreaming, error }: ChatAreaProps) {
   useEffect(() => {
     if (!isUserScrolledUpRef.current) {
       messagesEndRef.current?.scrollIntoView({
-        behavior: isStreaming ? 'instant' : 'smooth',
+        behavior: isStreaming ? "instant" : "smooth",
       });
     }
   }, [messages, isStreaming]);
@@ -90,11 +92,11 @@ function ChatArea({ messages, isStreaming, error }: ChatAreaProps) {
     <ScrollArea
       className="flex-1 overflow-hidden"
       data-testid="chat-area"
-      data-teststate={error ? 'error' : isStreaming ? 'streaming' : 'idle'}
+      data-teststate={error ? "error" : isStreaming ? "streaming" : "idle"}
       ref={(node: HTMLDivElement | null) => {
         if (node) {
           const viewport = node.querySelector(
-            '[data-slot="scroll-area-viewport"]'
+            '[data-slot="scroll-area-viewport"]',
           ) as HTMLDivElement;
           if (viewport) {
             scrollViewportRef.current = viewport;
@@ -105,14 +107,19 @@ function ChatArea({ messages, isStreaming, error }: ChatAreaProps) {
       <div className="p-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           {messages.length === 0 ? (
-            <p className="text-center text-gray-400 mt-8">No messages yet. Start a conversation!</p>
+            <p className="text-center text-gray-400 mt-8">
+              No messages yet. Start a conversation!
+            </p>
           ) : (
             <>
               {messages.map((msg, index) => (
                 <Message key={index} role={msg.role} content={msg.content} />
               ))}
               {isStreaming && (
-                <div data-testid="streaming-indicator" className="flex justify-start mb-4">
+                <div
+                  data-testid="streaming-indicator"
+                  className="flex justify-start mb-4"
+                >
                   <div className="bg-gray-200 px-4 py-2 rounded-lg">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-gray-600 rounded-full animate-pulse" />
@@ -151,26 +158,26 @@ function InputArea({
   onRefreshModels,
 }: InputAreaProps) {
   const { isReady, isAuthenticated } = useBodhi();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const isDisabled = !isReady || !isAuthenticated;
 
   const getHintText = () => {
-    if (!isReady) return 'Client not ready';
-    if (!isAuthenticated) return 'Please log in to send messages';
-    return 'Type a message...';
+    if (!isReady) return "Client not ready";
+    if (!isAuthenticated) return "Please log in to send messages";
+    return "Type a message...";
   };
 
   const handleSubmit = async () => {
     if (isDisabled || !message.trim()) return;
     const messageToSend = message;
-    setMessage('');
+    setMessage("");
     await onSendMessage(messageToSend);
   };
 
   const handleNewChat = () => {
     onClearMessages();
-    setMessage('');
+    setMessage("");
   };
 
   return (
@@ -191,8 +198,8 @@ function InputArea({
           <Input
             data-testid="chat-input"
             value={message}
-            onChange={e => setMessage(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             placeholder={getHintText()}
             disabled={isDisabled}
             className="col-start-2 border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -211,7 +218,7 @@ function InputArea({
                 <SelectValue placeholder="No models" />
               </SelectTrigger>
               <SelectContent>
-                {models.map(model => (
+                {models.map((model) => (
                   <SelectItem key={model} value={model}>
                     {model}
                   </SelectItem>
@@ -227,7 +234,10 @@ function InputArea({
               title="Refresh models"
               disabled={isLoadingModels}
             >
-              <RefreshCw className={isLoadingModels ? 'animate-spin' : ''} size={18} />
+              <RefreshCw
+                className={isLoadingModels ? "animate-spin" : ""}
+                size={18}
+              />
             </Button>
           </div>
 
@@ -252,7 +262,7 @@ function useChat() {
   const { client, isAuthenticated, isReady } = useBodhi();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('');
+  const [selectedModel, setSelectedModel] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [models, setModels] = useState<string[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
@@ -267,15 +277,15 @@ function useChat() {
     setError(null);
     try {
       if (!isAuthenticated) {
-        setError('Please log in to load models');
+        setError("Please log in to load models");
         return;
       }
 
       const modelIds: string[] = [];
       const response = client.models.list();
 
-      if (!response || typeof response[Symbol.asyncIterator] !== 'function') {
-        throw new Error('Invalid response from server');
+      if (!response || typeof response[Symbol.asyncIterator] !== "function") {
+        throw new Error("Invalid response from server");
       }
 
       for await (const model of response) {
@@ -287,9 +297,8 @@ function useChat() {
         setSelectedModel(modelIds[0]);
       }
     } catch (err) {
-      console.error('Failed to fetch models:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch models';
-      setError(errorMessage);
+      console.error("Failed to fetch models:", err);
+      setError(getErrorMessage(err, "Failed to fetch models"));
     } finally {
       setIsLoadingModels(false);
       isLoadingModelsRef.current = false;
@@ -307,7 +316,7 @@ function useChat() {
       abortControllerRef.current?.abort();
       abortControllerRef.current = null;
       setMessages([]);
-      setSelectedModel('');
+      setSelectedModel("");
       setModels([]);
       setError(null);
     }
@@ -315,7 +324,7 @@ function useChat() {
 
   const sendMessage = async (prompt: string) => {
     if (!selectedModel) {
-      setError('Please select a model first');
+      setError("Please select a model first");
       return;
     }
 
@@ -325,10 +334,13 @@ function useChat() {
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
 
-    const conversationMessages: ChatMessage[] = [...messages, { role: 'user', content: prompt }];
+    const conversationMessages: ChatMessage[] = [
+      ...messages,
+      { role: "user", content: prompt },
+    ];
 
-    setMessages(prev => [...prev, { role: 'user', content: prompt }]);
-    setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+    setMessages((prev) => [...prev, { role: "user", content: prompt }]);
+    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     try {
       const stream = client.chat.completions.create({
@@ -341,9 +353,9 @@ function useChat() {
         if (abortController.signal.aborted) {
           break;
         }
-        const content = chunk.choices?.[0]?.delta?.content || '';
+        const content = chunk.choices?.[0]?.delta?.content || "";
         if (content) {
-          setMessages(prev => {
+          setMessages((prev) => {
             const updated = [...prev];
             const lastIndex = updated.length - 1;
             updated[lastIndex] = {
@@ -355,12 +367,12 @@ function useChat() {
         }
       }
     } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') {
+      if (err instanceof Error && err.name === "AbortError") {
         return;
       }
-      console.error('Failed to send message:', err);
-      setError(err instanceof Error ? err.message : 'Failed to send message');
-      setMessages(prev => prev.slice(0, -1));
+      console.error("Failed to send message:", err);
+      setError(getErrorMessage(err, "Failed to send message"));
+      setMessages((prev) => prev.slice(0, -1));
     } finally {
       setIsStreaming(false);
       abortControllerRef.current = null;
@@ -417,7 +429,11 @@ export default function ChatDemo() {
 
   return (
     <>
-      <ChatArea messages={messages} isStreaming={isStreaming} error={chatError} />
+      <ChatArea
+        messages={messages}
+        isStreaming={isStreaming}
+        error={chatError}
+      />
       <InputArea
         onSendMessage={sendMessage}
         onClearMessages={clearMessages}
