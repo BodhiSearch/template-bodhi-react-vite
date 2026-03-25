@@ -1,9 +1,9 @@
-import { useBodhi } from "@bodhiapp/bodhi-js-react";
-import { Settings } from "lucide-react";
-import { toast } from "sonner";
-import StatusIndicator from "./StatusIndicator";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { useBodhi } from '@bodhiapp/bodhi-js-react';
+import { Settings } from 'lucide-react';
+import { toast } from 'sonner';
+import StatusIndicator from './StatusIndicator';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function Header() {
   const {
@@ -21,13 +21,19 @@ export default function Header() {
   } = useBodhi();
 
   const handleLogin = async () => {
-    const authState = await login({ flowType: "redirect" });
-    if (authState?.status === "error" && authState.error) {
+    const authState = await login({
+      flowType: 'redirect',
+      userRole: 'scope_user_user',
+      requested: {
+        mcp_servers: {{{mcpServersLiteral}}},
+      },
+    });
+    if (authState?.status === 'error' && authState.error) {
       toast.error(authState.error.message);
     }
   };
 
-  const isSettingsLoading = isInitializing || setupState !== "ready";
+  const isSettingsLoading = isInitializing || setupState !== 'ready';
 
   return (
     <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
@@ -45,15 +51,15 @@ export default function Header() {
           <StatusIndicator
             label="Client"
             status={isReady}
-            tooltip={isReady ? "Client ready" : "Client not ready"}
+            tooltip={isReady ? 'Client ready' : 'Client not ready'}
           />
           <StatusIndicator
             label="Server"
             status={isServerReady}
-            tooltip={isServerReady ? "Server ready" : "Server not ready"}
+            tooltip={isServerReady ? 'Server ready' : 'Server not ready'}
           />
           <span className="text-xs text-gray-600" title="Connection mode">
-            mode={clientState.mode || "unknown"}
+            mode={clientState.mode || 'unknown'}
           </span>
         </div>
 
@@ -69,7 +75,7 @@ export default function Header() {
 
         <section
           data-testid="section-auth"
-          data-teststate={isAuthenticated ? "authenticated" : "unauthenticated"}
+          data-teststate={isAuthenticated ? 'authenticated' : 'unauthenticated'}
         >
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
@@ -78,23 +84,15 @@ export default function Header() {
                 className="text-sm text-gray-700"
                 title={auth.user?.email}
               >
-                {auth.user?.name || auth.user?.email || "User"}
+                {auth.user?.name || auth.user?.email || 'User'}
               </span>
-              <Button
-                data-testid="btn-auth-logout"
-                onClick={logout}
-                variant="ghost"
-              >
+              <Button data-testid="btn-auth-logout" onClick={logout} variant="ghost">
                 Logout
               </Button>
             </div>
           ) : (
-            <Button
-              data-testid="btn-auth-login"
-              onClick={handleLogin}
-              disabled={isAuthLoading}
-            >
-              {isAuthLoading ? <Spinner /> : "Login"}
+            <Button data-testid="btn-auth-login" onClick={handleLogin} disabled={isAuthLoading}>
+              {isAuthLoading ? <Spinner /> : 'Login'}
             </Button>
           )}
         </section>
